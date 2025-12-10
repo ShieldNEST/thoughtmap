@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -11,26 +17,220 @@ body {
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: hsl(var(--foreground));
+  background: hsl(var(--background));
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  /* Dark Mode Colors */
+  --background: 220 13% 18%;
+  --foreground: 210 40% 98%;
+  --card: 220 13% 22%;
+  --card-foreground: 210 40% 98%;
+  --primary: 210 40% 98%;
+  --primary-foreground: 220 13% 18%;
+  --secondary: 217.2 10% 30%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 10% 30%;
+  --muted-foreground: 215 20% 65%;
+  --accent: 217.2 10% 30%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217.2 10% 30%;
+  --input: 217.2 10% 30%;
+  --ring: 217.2 10% 30%;
+  
+  /* Accent Colors */
+  --accent-green: 142 76% 45%;
+  --accent-purple: 280 70% 60%;
+  
+  /* Card Structure */
+  --card-padding: 24px;
+  --card-padding-sm: 16px;
+  --card-radius: 0;
+  --card-transition: all 200ms ease;
+  
+  /* Shadows */
+  --card-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --card-shadow-hover: 
+    0 8px 24px rgba(0, 0, 0, 0.12),
+    0 4px 8px rgba(0, 0, 0, 0.08);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+/* Card Bracket Corners - Angular */
+.card-bracket-corner {
+  position: relative;
+  overflow: visible;
+}
+
+.card-bracket-corner::before {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  width: 20px;
+  height: 20px;
+  border-top: 3px solid hsl(var(--accent-green));
+  border-left: 3px solid hsl(var(--accent-green));
+  transition: all 200ms ease;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 1;
+}
+
+.card-bracket-corner::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  right: -3px;
+  width: 20px;
+  height: 20px;
+  border-bottom: 3px solid hsl(var(--accent-green));
+  border-right: 3px solid hsl(var(--accent-green));
+  transition: all 200ms ease;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 1;
+}
+
+.card-bracket-corner:hover::before,
+.card-bracket-corner:hover::after {
+  width: 28px;
+  height: 28px;
+}
+
+.card-bracket-corner-purple::before {
+  border-top-color: hsl(var(--accent-purple));
+  border-left-color: hsl(var(--accent-purple));
+}
+
+.card-bracket-corner-purple::after {
+  border-bottom-color: hsl(var(--accent-purple));
+  border-right-color: hsl(var(--accent-purple));
+}
+
+/* Card Bracket Corners - Rounded */
+.card-bracket-corner-round::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 20px;
+  height: 20px;
+  border-top: 3px solid hsl(var(--accent-green));
+  border-left: 3px solid hsl(var(--accent-green));
+  border-top-left-radius: 12px;
+  transition: all 200ms ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.card-bracket-corner-round::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 20px;
+  height: 20px;
+  border-bottom: 3px solid hsl(var(--accent-green));
+  border-right: 3px solid hsl(var(--accent-green));
+  border-bottom-right-radius: 12px;
+  transition: all 200ms ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.card-bracket-corner-round:hover::before,
+.card-bracket-corner-round:hover::after {
+  width: 28px;
+  height: 28px;
+  opacity: 1;
+}
+
+.card-bracket-corner-round-purple::before {
+  border-top-color: hsl(var(--accent-purple));
+  border-left-color: hsl(var(--accent-purple));
+}
+
+.card-bracket-corner-round-purple::after {
+  border-bottom-color: hsl(var(--accent-purple));
+  border-right-color: hsl(var(--accent-purple));
+}
+
+/* Card Hover Effect */
+.card-hover {
+  transition: all 200ms ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-3px);
+  border-color: hsl(var(--border));
+  box-shadow: var(--card-shadow-hover);
+}
+
+/* Card Border Enhancement */
+.card-institutional {
+  border-color: hsl(var(--border) / 0.5);
+  box-shadow: var(--card-shadow);
+}
+
+/* Section Labels */
+.text-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 4px;
+}
+
+.text-label-comment::before {
+  content: '// ';
+  opacity: 0.6;
+  margin-right: 2px;
+}
+
+/* Status Indicators */
+.change-positive {
+  color: hsl(142 76% 45%);
+}
+
+.change-negative {
+  color: hsl(0 84% 60%);
+}
+
+/* Mermaid Diagram Styling */
+.mermaid {
+  background: transparent !important;
+}
+
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Better spacing utilities */
+.space-y-8 > * + * {
+  margin-top: 2rem;
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .card-bracket-corner::before,
+  .card-bracket-corner::after,
+  .card-bracket-corner-round::before,
+  .card-bracket-corner-round::after,
+  .card-hover {
+    transition: none;
+  }
+  
+  .card-hover:hover {
+    transform: none;
   }
 }
 
