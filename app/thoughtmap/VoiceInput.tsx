@@ -9,10 +9,10 @@ interface RecognitionLike {
   continuous: boolean;
   interimResults: boolean;
   lang: string;
-  onresult: ((event: SpeechRecognitionEvent) => void) | null;
+  onresult: ((event: any) => void) | null;
   onstart: (() => void) | null;
   onend: (() => void) | null;
-  onerror: ((event: SpeechRecognitionErrorEvent | Event) => void) | null;
+  onerror: ((event: any) => void) | null;
 }
 
 declare global {
@@ -22,11 +22,7 @@ declare global {
   } | undefined;
 }
 
-interface VoiceInputProps {
-  onDone?: () => void;
-}
-
-export function VoiceInput({ onDone }: VoiceInputProps) {
+export default function VoiceInput() {
   const router = useRouter();
   const recognitionRef = useRef<RecognitionLike | null>(null);
   const [listening, setListening] = useState(false);
@@ -34,12 +30,10 @@ export function VoiceInput({ onDone }: VoiceInputProps) {
   const [status, setStatus] = useState("Idle");
   const [error, setError] = useState<string | null>(null);
   const [supported, setSupported] = useState(true);
-  const [open, setOpen] = useState(false);
 
   const sendThought = useCallback(
     async (text: string) => {
       setStatus("Processing…");
-      setProcessing(true);
       try {
         const response = await fetch("/api/thoughtmap/add", {
           method: "POST",
@@ -55,7 +49,6 @@ export function VoiceInput({ onDone }: VoiceInputProps) {
         }
 
         setStatus("Added!");
-        onDone?.();
         router.refresh();
       } catch (err) {
         const message = err instanceof Error ? err.message : "Unknown error";
@@ -65,7 +58,7 @@ export function VoiceInput({ onDone }: VoiceInputProps) {
         setProcessing(false);
       }
     },
-    [onDone, router]
+    [router]
   );
 
   useEffect(() => {
@@ -84,7 +77,7 @@ export function VoiceInput({ onDone }: VoiceInputProps) {
     recognition.lang = "en-US";
     recognition.onresult = (event) => {
       const transcript = Array.from(event.results)
-        .map((result: SpeechRecognitionResult) => result[0]?.transcript ?? "")
+        .map((result: any) => result[0]?.transcript ?? "")
         .join(" ")
         .trim();
 
@@ -105,9 +98,8 @@ export function VoiceInput({ onDone }: VoiceInputProps) {
     recognition.onend = () => {
       setListening(false);
     };
-    recognition.onerror = (event) => {
-      const message = (event as SpeechRecognitionErrorEvent)?.error || "Speech recognition error";
-      setError(message);
+    recognition.onerror = (event: any) => {
+      setError(event?.error || "Speech recognition error");
       setStatus("Error encountered");
       setListening(false);
     };
@@ -136,54 +128,37 @@ export function VoiceInput({ onDone }: VoiceInputProps) {
   };
 
   return (
-    <div className="rounded-lg border bg-white p-4 shadow-sm space-y-3">
-      <button
-        type="button"
-        onClick={() => setOpen((prev) => !prev)}
-        className="w-full rounded-md bg-emerald-600 px-4 py-2 text-white shadow hover:bg-emerald-700 transition"
-        aria-expanded={open}
-      >
-        🎤 Add Thought (Voice)
-      </button>
-
-      {open && (
-        <div className="space-y-2">
-          <div className="flex items-center justify-between gap-2">
-            <span className="font-medium">Voice Input</span>
-            <span className="text-sm text-gray-600">{status}</span>
-          </div>
-          {!supported ? (
-            <p className="text-sm text-red-600">
-              Speech recognition is not supported in this browser.
-            </p>
-          ) : (
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <button
-                type="button"
-                onClick={startListening}
-                disabled={listening || processing}
-                className="flex-1 rounded-md bg-blue-600 px-4 py-2 text-white shadow hover:bg-blue-700 transition disabled:opacity-60"
-              >
-                {listening ? "Listening…" : "Start microphone"}
-              </button>
-              <button
-                type="button"
-                onClick={stopListening}
-                disabled={!listening}
-                className="flex-1 rounded-md bg-gray-200 px-4 py-2 text-gray-800 shadow hover:bg-gray-300 transition disabled:opacity-60"
-              >
-                Stop
-              </button>
-            </div>
-          )}
-          {processing && (
-            <p className="text-sm text-blue-700">Processing…</p>
-          )}
-          {error && <p className="text-sm text-red-600">{error}</p>}
+    <div className="rounded-lg border bg-white p-4 shadow-sm space-y-2">
+      <div className="flex items-center justify-between gap-2">
+        <span className="font-medium">Voice Input</span>
+        <span className="text-sm text-gray-600">{status}</span>
+      </div>
+      {!supported ? (
+        <p className="text-sm text-red-600">
+          Speech recognition is not supported in this browser.
+        </p>
+      ) : (
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <button
+            onClick={startListening}
+            disabled={listening || processing}
+            className="flex-1 rounded-md bg-emerald-600 px-4 py-2 text-white shadow hover:bg-emerald-700 transition disabled:opacity-60"
+          >
+            {listening ? "Listening…" : "Start microphone"}
+          </button>
+          <button
+            onClick={stopListening}
+            disabled={!listening}
+            className="flex-1 rounded-md bg-gray-200 px-4 py-2 text-gray-800 shadow hover:bg-gray-300 transition disabled:opacity-60"
+          >
+            Stop
+          </button>
         </div>
       )}
+      {processing && (
+        <p className="text-sm text-blue-700">Processing speech and appending thought…</p>
+      )}
+      {error && <p className="text-sm text-red-600">{error}</p>}
     </div>
   );
 }
-
-export default VoiceInput;

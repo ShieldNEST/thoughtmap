@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { VoiceInput } from "./VoiceInput";
+import VoiceInput from "./VoiceInput";
 import RegenerateButton from "./RegenerateButton";
 
 async function readFileSafe(targetPath: string): Promise<string> {
