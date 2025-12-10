@@ -20,3 +20,5 @@ Install the watcher dependency and regenerate `mindmap.md` whenever `thought_log
 python3 -m pip install watchdog
 python3 watch_thoughtmap.py
 ```
+
+The watcher listens for file updates in the same directory as `thought_log.txt`, runs the converter, and prints a short status message when `mindmap.md` is refreshed.

@@ -1,0 +1,58 @@
+{
+  "root": "Conversation",
+  "nodes": [
+    {
+      "id": "n0",
+      "text": "I need a simple mind map of this chat.",
+      "role": "User",
+      "timestamp": ""
+    },
+    {
+      "id": "n1",
+      "text": "Sure, I will read the log and produce a Mermaid mindmap.",
+      "role": "Assistant",
+      "timestamp": ""
+    },
+    {
+      "id": "n2",
+      "text": "Make it minimal, no extra features.",
+      "role": "User",
+      "timestamp": ""
+    },
+    {
+      "id": "n3",
+      "text": "Got it, only the essentials.",
+      "role": "Assistant",
+      "timestamp": ""
+    },
+    {
+      "id": "n4",
+      "text": "Noted for testing",
+      "role": "Assistant",
+      "timestamp": "2025-12-10 05:04"
+    }
+  ],
+  "edges": [
+    [
+      "root",
+      "n0"
+    ],
+    [
+      "n0",
+      "n1"
+    ],
+    [
+      "n1",
+      "n2"
+    ],
+    [
+      "n2",
+      "n3"
+    ],
+    [
+      "n3",
+      "n4"
+    ]
+  ],
+  "groups": []
+}
