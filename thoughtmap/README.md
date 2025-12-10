@@ -11,3 +11,11 @@ python3 thoughtmap.py --log thought_log.txt --out mindmap.md
 ```
 
 The script validates that the log file exists and writes a fenced Mermaid `graph TD` block to the requested output path (creating parent directories if needed). Each log line is parsed into a normalized node label (stripping brackets, collapsing whitespace), and unparseable lines are skipped with an inline Mermaid comment noting the warning.
+
+## Live Updating
+
+Start the watcher to regenerate `mindmap.md` whenever `thought_log.txt` changes:
+
+```bash
+python3 watch_thoughtmap.py
+```
